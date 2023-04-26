@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use App\Models\Student;
+use App\Http\Requests\StudentRegisterRequest;
+
+
 
 class StudentRegisterController extends Controller
 {
@@ -16,16 +17,12 @@ class StudentRegisterController extends Controller
         return view('auth.student-register');
     }
 
-    public function register(Request $request)
+    public function register(StudentRegisterRequest $request) 
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-        ]);
-        
-        Student::create($request->post());
+        $student = Student::create($request->validated());
 
-        return redirect()->route('student.login')->with('success','Student has been created successfully.');
+        auth()->login($student);
+
+        return redirect('/')->with('success', "Account successfully registered.");
     }
 }

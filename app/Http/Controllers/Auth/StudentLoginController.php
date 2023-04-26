@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StudentLoginRequest;
 
 class StudentLoginController extends Controller
 {
@@ -14,29 +15,32 @@ class StudentLoginController extends Controller
         return view('auth.student-login');
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        $credentials = $request->getCredentials();
 
-        $credentials = $request->only('email', 'password');
-        $remember = $request->has('remember');
+        if (!Auth::validate($credentials)) :
+            return redirect()->to('login')
+                ->withErrors(trans('auth.failed'));
+        endif;
 
-        if (Auth::guard('student')->attempt($credentials, $remember)) {
-            return redirect()->intended('/dashboard');
-        }
+        $user = Auth::getProvider()->retrieveByCredentials($credentials);
 
-        return back()->withInput($request->only('email', 'remember'))->withErrors([
-            'email' => 'These credentials do not match our records.',
-        ]);
+        Auth::login($user);
+
+        return $this->authenticated($request, $user);
     }
 
-
-    public function logout()
+    /**
+     * Handle response after user authenticated
+     * 
+     * @param Request $request
+     * @param Auth $user
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    protected function authenticated(Request $request, $user)
     {
-        Auth::guard('student')->logout();
-        return redirect('/');
+        return redirect()->intended();
     }
 }
