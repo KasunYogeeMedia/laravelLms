@@ -1,8 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginRegisterController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\StudentLoginController;
-use App\Http\Controllers\Auth\StudentRegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +18,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// login
-Route::get('/student/login', [StudentLoginController::class, 'showLoginForm'])->name('student.login');
-Route::post('/student/login', [StudentLoginController::class, 'login'])->name('student.login.submit');
+Route::controller(LoginRegisterController::class)->group(function () {
+    Route::get('/register', 'register')->name('register');
+    Route::post('/store', 'store')->name('store');
+    Route::get('/login', 'login')->name('login');
+    Route::post('/authenticate', 'authenticate')->name('authenticate');
+    Route::get('/dashboard', 'dashboard')->name('dashboard');
+    Route::post('/logout', 'logout')->name('logout');
+});
 
-// Register
-Route::get('/student/register', [StudentRegisterController::class, 'show'])->name('student.register');
-Route::post('/student/register', [StudentRegisterController::class, 'register'])->name('student.register.submit');
+Route::controller(AdminController::class)->group(function () {
+    Route::get('/admin/login', 'login')->name('admin.login');
+    
+});

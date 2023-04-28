@@ -40,16 +40,17 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
-            'hash' => false,
-        ],
-
         'student' => [
             'driver' => 'session',
             'provider' => 'students',
+        ],
+        'teacher' => [
+            'driver' => 'session',
+            'provider' => 'teachers',
+        ],
+        'lms_admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
         ],
     ],
 
@@ -75,11 +76,26 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-
         'students' => [
             'driver' => 'eloquent',
             'model' => App\Models\Student::class,
         ],
+
+        'teachers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Teacher::class,
+        ],
+        'lms_admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\LmsAdmin::class,
+        ],
+
+
+
+        // 'users' => [
+        //     'driver' => 'database',
+        //     'table' => 'users',
+        // ],
     ],
 
     /*

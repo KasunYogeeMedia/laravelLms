@@ -2,18 +2,17 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\Student as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-
-class Student extends Model
+class LmsAdmin extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $guard = 'student';
+    protected $guard = '';
 
     /**
      * The attributes that are mass assignable.
@@ -21,7 +20,7 @@ class Student extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'fullname',
+        'name',
         'email',
         'password',
     ];
