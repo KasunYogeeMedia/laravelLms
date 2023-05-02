@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('reid')->nullable();
             $table->string('stnumber')->nullable();
             $table->string('email')->unique();
             $table->string('fullname')->nullable();
@@ -25,7 +24,7 @@ return new class extends Migration
             $table->string('pcontactnumber')->nullable();
             $table->string('contactnumber')->nullable();
             $table->text('address')->nullable();
-            $table->string('level')->nullable();
+            $table->string('level')->default(0);
             $table->string('image')->nullable();
             $table->string('password');
             $table->tinyInteger('status')->default(0);

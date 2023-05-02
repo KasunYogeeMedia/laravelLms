@@ -1,4 +1,4 @@
-@extends('layouts.layouts')
+@extends('layouts.app')
 
 @section('content')
 
@@ -6,19 +6,10 @@
     <div class="col-md-8">
 
         <div class="card">
-            <div class="card-header">Register</div>
+            <div class="card-header">Login</div>
             <div class="card-body">
-                <form action="{{ route('store') }}" method="post">
+                <form action="{{ route('student.authenticate') }}" method="post">
                     @csrf
-                    <div class="mb-3 row">
-                        <label for="fullname" class="col-md-4 col-form-label text-md-end text-start">Name</label>
-                        <div class="col-md-6">
-                          <input type="text" class="form-control @error('fullname') is-invalid @enderror" id="fullname" name="fullname" value="{{ old('fullname') }}">
-                            @if ($errors->has('fullname'))
-                                <span class="text-danger">{{ $errors->first('fullname') }}</span>
-                            @endif
-                        </div>
-                    </div>
                     <div class="mb-3 row">
                         <label for="email" class="col-md-4 col-form-label text-md-end text-start">Email Address</label>
                         <div class="col-md-6">
@@ -38,13 +29,7 @@
                         </div>
                     </div>
                     <div class="mb-3 row">
-                        <label for="password_confirmation" class="col-md-4 col-form-label text-md-end text-start">Confirm Password</label>
-                        <div class="col-md-6">
-                          <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <input type="submit" class="col-md-3 offset-md-5 btn btn-primary" value="Register">
+                        <input type="submit" class="col-md-3 offset-md-5 btn btn-primary" value="Login">
                     </div>
                     
                 </form>

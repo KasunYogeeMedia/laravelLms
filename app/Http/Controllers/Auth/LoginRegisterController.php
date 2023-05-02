@@ -27,7 +27,7 @@ class LoginRegisterController extends Controller
      */
     public function register()
     {
-        return view('auth.register');
+        return view('auth.student.register');
     }
 
     /**
@@ -39,22 +39,42 @@ class LoginRegisterController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'fullname' => 'required|string|max:250',
+            'stnumber' => 'required|string',
             'email' => 'required|email|max:250|unique:students',
+            'fullname' => 'required|string|max:250',
+            'dob' => 'required|string',
+            'gender' => 'required|string',
+            'school' => 'required|string|max:250',
+            'district' => 'required|string|max:250',
+            'town' => 'required|string|max:250',
+            'pcontactnumber' => 'required|digits:10',
+            'contactnumber' => 'required|digits:10',
+            'address' => 'required|string|max:250',
+            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'password' => 'required|min:8|confirmed'
         ]);
 
         Student::create([
-            'fullname' => $request->fullname,
+            'stnumber' => $request->stnumber,
             'email' => $request->email,
+            'fullname' => $request->fullname,
+            'dob' => $request->dob,
+            'gender' => $request->gender,
+            'school' => $request->school,
+            'district' => $request->district,
+            'town' => $request->town,
+            'pcontactnumber' => $request->pcontactnumber,
+            'contactnumber' => $request->contactnumber,
+            'address' => $request->address,
+            'image' => $request->image,
             'password' => Hash::make($request->password)
         ]);
 
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
         $request->session()->regenerate();
-        return redirect()->route('dashboard')
-        ->withSuccess('You have successfully registered & logged in!');
+        return redirect()->route('student.dashboard')
+            ->withSuccess('You have successfully registered & logged in!');
     }
 
     /**
@@ -64,7 +84,7 @@ class LoginRegisterController extends Controller
      */
     public function login()
     {
-        return view('auth.login');
+        return view('auth.student.login');
     }
 
     /**
@@ -80,8 +100,7 @@ class LoginRegisterController extends Controller
             'password' => 'required'
         ]);
 
-        if(Auth::guard('student')-> attempt($credentials))
-        {
+        if (Auth::guard('student')->attempt($credentials)) {
             $request->session()->regenerate();
             return redirect()->route('dashboard')
                 ->withSuccess('You have successfully logged in!');
@@ -90,9 +109,8 @@ class LoginRegisterController extends Controller
         return redirect()->back()->withErrors([
             'email' => 'Your provided credentials do not match in our records.',
         ])->onlyInput('email');
+    }
 
-    } 
-    
     /**
      * Display a dashboard to authenticated users.
      *
@@ -100,17 +118,16 @@ class LoginRegisterController extends Controller
      */
     public function dashboard()
     {
-        if(Auth::check())
-        {
-            return view('auth.dashboard');
+        if (Auth::check()) {
+            return view('auth.student.dashboard');
         }
-        
+
         return redirect()->route('login')
             ->withErrors([
-            'email' => 'Please login to access the dashboard.',
-        ])->onlyInput('email');
-    } 
-    
+                'email' => 'Please login to access the dashboard.',
+            ])->onlyInput('email');
+    }
+
     /**
      * Log out the user from application.
      *
@@ -124,6 +141,5 @@ class LoginRegisterController extends Controller
         $request->session()->regenerateToken();
         return redirect()->route('login')
             ->withSuccess('You have logged out successfully!');;
-    }    
-
+    }
 }
